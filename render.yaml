@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: jiang-gateway
+    runtime: python
+    plan: free
+    region: singapore          # ← 国内访问比默认 us-oregon 快 200ms+
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: UPSTREAM_API_KEY
+        sync: false
+      - key: UPSTREAM_BASE
+        value: https://cli.999554.xyz/v1
+      - key: UPSTREAM_MODEL
+        value: deepseek-v4.1-flash
+      - key: GATEWAY_TOKEN
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.12.0
